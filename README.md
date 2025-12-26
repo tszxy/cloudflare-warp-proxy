@@ -169,6 +169,49 @@ sudo systemctl is-enabled wg-quick@wgcf
 sudo systemctl is-enabled xray
 ```
 
+## 💾 备份和恢复
+
+### 备份配置
+
+```bash
+# 下载备份脚本
+wget https://raw.githubusercontent.com/tszxy/cloudflare-warp-proxy/main/backup.sh
+chmod +x backup.sh
+
+# 运行备份
+sudo bash backup.sh
+```
+
+备份会生成一个压缩包，包含：
+- WireGuard 配置（包含密钥）
+- WARP 账号信息
+- Xray 配置
+- 系统和 Docker 代理设置
+- 一键恢复脚本
+
+### 下载备份到本地
+
+```bash
+# 备份完成后会显示文件位置
+scp root@your-server:/root/warp-backup-*.tar.gz ./
+```
+
+### 恢复配置
+
+```bash
+# 解压备份
+tar -xzf warp-backup-*.tar.gz
+cd warp-backup-*
+
+# 运行恢复脚本
+sudo bash restore.sh
+
+# 重启服务
+sudo systemctl restart wg-quick@wgcf xray
+```
+
+**⚠️ 重要：** 备份文件包含私钥等敏感信息，请妥善保管！
+
 ## 🗑️ 卸载
 
 ```bash
